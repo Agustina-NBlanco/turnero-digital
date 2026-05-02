@@ -10,6 +10,6 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params
-    
+
     return res.json(await getUserByIdService(id))
 }
