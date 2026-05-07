@@ -1,5 +1,5 @@
 import { IsDateString, IsEmail, IsNotEmpty, Length } from "class-validator";
-import { UserRole } from "../enums/UserRole";
+import { UserRole } from "../../enums/UserRole";
 
 
 export class CreateUserDto {

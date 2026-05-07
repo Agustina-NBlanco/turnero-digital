@@ -1,6 +1,9 @@
 import { DataSource } from "typeorm";
 import { ENV } from "./env";
 import { User } from "../entities/User";
+import { Doctor } from "../entities/Doctor";
+import { Credential } from "../entities/Credential";
+import { Appointment } from "../entities/Appointment";
 
 
 
@@ -13,5 +16,5 @@ export const AppDataSource = new DataSource ({
     database: ENV.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [User]
+    entities: [User, Doctor, Credential, Appointment]
 })
