@@ -1,7 +1,5 @@
 import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsUUID, Length, ValidateIf } from "class-validator";
 
-
-
 export class CreateAppointmentDto {
 
     @IsDateString()

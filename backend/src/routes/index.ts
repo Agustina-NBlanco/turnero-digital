@@ -1,11 +1,13 @@
 import { Router } from "express";
 import userRouter from "./user.routes";
 import appointmentsRouter from "./appointments.routes";
+import doctorRouter from "./doctor.routes";
 
 const router: Router = Router();
 
-router.use("/", (req, res) => { res.send("Hello World!") });
+router.get("/", (req, res) => { res.send("Hello World!") });
 router.use("/users", userRouter)
 router.use("/appointments", appointmentsRouter)
+router.use("/doctors", doctorRouter)
 
 export default router;
