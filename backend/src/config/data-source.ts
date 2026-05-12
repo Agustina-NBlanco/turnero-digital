@@ -7,7 +7,7 @@ import { Appointment } from "../entities/Appointment";
 
 
 
-export const AppDataSource = new DataSource ({
+export const AppDataSource = new DataSource({
     type: "postgres",
     host: ENV.DB_HOST,
     port: ENV.DB_PORT,
