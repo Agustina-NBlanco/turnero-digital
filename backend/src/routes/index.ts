@@ -10,4 +10,4 @@ router.use("/users", userRouter)
 router.use("/appointments", appointmentsRouter)
 router.use("/doctors", doctorRouter)
 
-export default router;
+export default router; 
