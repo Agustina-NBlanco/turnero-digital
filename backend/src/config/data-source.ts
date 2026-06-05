@@ -16,5 +16,6 @@ export const AppDataSource = new DataSource({
     database: ENV.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [User, Doctor, Credential, Appointment]
+    entities: [User, Doctor, Credential, Appointment],
+    dropSchema: false,
 })
