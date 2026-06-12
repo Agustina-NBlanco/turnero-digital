@@ -8,11 +8,14 @@ import { Doctor } from "../entities/Doctor"
 import { AppointmentStatus } from "../enums/AppointmentStatus"
 import { User } from "../entities/User"
 import { buildAppointmentDateTime } from "../utils/date.utils"
+import { DoctorSchedule } from "../entities/DoctorSchedule"
+import { ENV } from "../config/env"
 
 
 const appointmentRepository = AppDataSource.getRepository(Appointment)
 const doctorRepository = AppDataSource.getRepository(Doctor)
 const userRepository = AppDataSource.getRepository(User)
+const doctorScheduleRepository = AppDataSource.getRepository(DoctorSchedule)
 
 export const getAppointments = async () => {
     return appointmentRepository.find()
@@ -39,7 +42,10 @@ const mapToAppointment = (dto: CreateAppointmentDto, doctor: Doctor): Partial<Ap
 
 export const createAppointment = async (dto: CreateAppointmentDto) => {
 
+    if (!ENV.ALLOW_GUEST_APPOINTMENTS && !dto.userId) throw new AppError("You must be logged in to create an appointment", 401)
+        
     const appointmentDate = new Date(dto.date)
+    const dayOfWeek = appointmentDate.getDay()
 
     if (appointmentDate < new Date()) throw new AppError('You cannot create an appointment in the past', 400)
 
@@ -49,6 +55,22 @@ export const createAppointment = async (dto: CreateAppointmentDto) => {
     const doctor = await doctorRepository.findOne({ where: { id: dto.doctorId } })
 
     if (!doctor) throw new AppError('Doctor not found', 404)
+
+    const schedules = await doctorScheduleRepository.find({
+        where: {
+            doctor: { id: dto.doctorId },
+            dayOfWeek
+        }
+    })
+
+    if (schedules.length === 0) throw new AppError("Doctor is not available on this day", 400)
+
+    const isWithinSchedule = schedules.some(schedule => {
+        return dto.time >= schedule.startTime && dto.time < schedule.endTime
+    })
+
+    if (!isWithinSchedule) throw new AppError("Appointment is outside doctor's working hours", 400)
+
 
     if (dto.userId) {
         const user = await userRepository.findOne({ where: { id: dto.userId } })
