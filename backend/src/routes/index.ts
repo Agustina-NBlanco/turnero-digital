@@ -6,8 +6,7 @@ import doctorSchedulesRouter from "./doctorSchedules.routes";
 import authRouter from "./auth.routes";
 
 const router: Router = Router();
-router.use("/auth", authRouter) // Importamos el router de autenticación de forma dinámica para evitar problemas de dependencias circulares
-router.get("/", (req, res) => { res.send("Hello World!") });
+router.use("/auth", authRouter)
 router.use("/users", userRouter)
 router.use("/appointments", appointmentsRouter)
 router.use("/doctors", doctorRouter)
