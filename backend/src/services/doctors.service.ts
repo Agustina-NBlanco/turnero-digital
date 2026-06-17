@@ -7,6 +7,7 @@ import { Appointment } from "../entities/Appointment"
 import { Doctor } from "../entities/Doctor"
 import { AppError } from "../utils/AppError"
 import { generateTimeSlots } from "../utils/generateTimeSlots"
+import { getDayOfWeek } from "../utils/date.utils"
 
 
 const doctorRepository = AppDataSource.getRepository(Doctor)
@@ -63,9 +64,7 @@ export const getDoctorAvailability = async (id: string, date: string) => {
 
     if (!doctor) throw new AppError('Doctor not found', 404)
 
-    const [year, month, day] = date.split('-').map(Number) as [number, number, number]
-
-    const dayOfWeek = new Date(year, month - 1, day).getDay()
+    const dayOfWeek = getDayOfWeek(date)
 
     const schedules = doctor.schedules.filter(schedule => schedule.dayOfWeek === dayOfWeek)
 
