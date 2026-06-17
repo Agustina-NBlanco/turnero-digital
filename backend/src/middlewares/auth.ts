@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../utils/jwt";
+import { verifyAccessToken } from "../utils/jwt";
 import { extractTokenFromHeader } from "../utils/auth";
 
 export const authMidleware = (req: Request, res: Response, next: NextFunction) => {
@@ -8,7 +8,7 @@ export const authMidleware = (req: Request, res: Response, next: NextFunction) =
     if (!token) return res.status(401).json({ message: "Token required" })
 
     try {
-        const decoded = verifyToken(token)
+        const decoded = verifyAccessToken(token)
         req.user = decoded;
         next()
     } catch {
