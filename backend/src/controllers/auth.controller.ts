@@ -12,6 +12,8 @@ import { AppError } from "../utils/AppError";
 import { RegisterDto } from "../dtos/auth/register.dto";
 import { LoginDto } from "../dtos/auth/login.dto";
 import { RefreshTokenDto } from "../dtos/auth/refreshToken.dto";
+import { ForgotPasswordDto } from "../dtos/auth/forgot-password.dto";
+import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
 
 export const register = async (req: Request<{}, {}, RegisterDto>, res: Response) => {
     const user = await registerService(req.body)
@@ -40,7 +42,7 @@ export const logout = async (req: Request, res: Response) => {
     return res.status(200).json(response)
 }
 
-export const forgotPassword = async (req: Request, res: Response) => {
+export const forgotPassword = async (req: Request<{}, {}, ForgotPasswordDto>, res: Response) => {
     const { email } = req.body
 
     await forgotPasswordService(email)
@@ -51,7 +53,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 }
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (req: Request<{}, {}, ResetPasswordDto>, res: Response) => {
     await resetPasswordService(req.body)
     return res.status(200).json({
         message: "Password updated successfully"
