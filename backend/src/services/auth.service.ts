@@ -8,6 +8,8 @@ import { comparePassword, hashPassword } from "../utils/bcrypt";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt";
 import { compareToken, hashToken } from "../utils/hash";
 import { LoginResponse, LogoutResponse } from "../types/AuthResponses";
+import { generateResetToken, hashResetToken } from "../utils/crypto";
+import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
 
 const userRepository = AppDataSource.getRepository(User)
 const credentialRepository = AppDataSource.getRepository(Credential)
@@ -103,4 +105,49 @@ export const logout = async (userId: string): Promise<LogoutResponse> => {
     await credentialRepository.save(user.credential)
 
     return { message: "Logged out successfully" }
+}
+
+export const forgotPassword = async (email: string) => {
+    const user = await userRepository.findOne({
+        where: { email },
+        relations: ["credential"]
+    })
+    if (!user) return
+
+    const token = generateResetToken()
+    const hashed = hashResetToken(token)
+
+    user.credential.resetToken = hashed
+    user.credential.resetTokenExpires = new Date(Date.now() + 1000 * 60 * 15)
+
+    await credentialRepository.save(user.credential)
+
+    console.log(`Reset Link: http://localhost:3000/reset-password?token=${token}`)
+
+}
+
+export const resetPassword = async (dto: ResetPasswordDto) => {
+
+    if (dto.password !== dto.confirmPassword) {
+        throw new AppError('Password do not match', 400)
+    }
+
+    const hashedToken = hashResetToken(dto.token)
+
+    const credential = await credentialRepository.findOne({
+        where: { resetToken: hashedToken },
+        relations: ["user"]
+    })
+
+    if (!credential || !credential.resetTokenExpires) throw new AppError("Invalide or expired token", 400)
+
+    if(credential.resetTokenExpires < new Date()) throw new AppError("Token expired", 400)
+
+    const newPassword = await hashPassword(dto.password)
+
+    credential.password = newPassword
+    credential.resetToken = null
+    credential.resetTokenExpires = null
+
+    await credentialRepository.save(credential)
 }

@@ -3,7 +3,9 @@ import {
     register as registerService,
     login as loginService,
     refresh as refreshService,
-    logout as logoutService
+    logout as logoutService,
+    forgotPassword as forgotPasswordService,
+    resetPassword as resetPasswordService
 
 } from "../services/auth.service";
 import { AppError } from "../utils/AppError";
@@ -36,4 +38,22 @@ export const logout = async (req: Request, res: Response) => {
 
     const response = await logoutService(user.id)
     return res.status(200).json(response)
+}
+
+export const forgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body
+
+    await forgotPasswordService(email)
+
+    return res.status(200).json({
+        message: 'If the mail exists, a reset link was sent'
+    })
+
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+    await resetPasswordService(req.body)
+    return res.status(200).json({
+        message: "Password updated successfully"
+    })
 }
