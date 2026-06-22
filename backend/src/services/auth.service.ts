@@ -7,13 +7,14 @@ import { AppError } from "../utils/AppError";
 import { comparePassword, hashPassword } from "../utils/bcrypt";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt";
 import { compareToken, hashToken } from "../utils/hash";
+import { LoginResponse, LogoutResponse } from "../types/AuthResponses";
 import { generateResetToken, hashResetToken } from "../utils/crypto";
 import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
 
 const userRepository = AppDataSource.getRepository(User)
 const credentialRepository = AppDataSource.getRepository(Credential)
 
-export const register = async (dto: RegisterDto) => {
+export const register = async (dto: RegisterDto): Promise<User> => {
     if (dto.password !== dto.confirmPassword) throw new AppError('Password do not match', 400)
 
     const existingUser = await userRepository.findOne({ where: { email: dto.email } })
@@ -38,7 +39,7 @@ export const register = async (dto: RegisterDto) => {
     return user
 }
 
-export const login = async (dto: LoginDto) => {
+export const login = async (dto: LoginDto): Promise<LoginResponse> => {
 
     const user = await userRepository.findOne({ where: { email: dto.email }, relations: ["credential"] })
 
@@ -57,7 +58,7 @@ export const login = async (dto: LoginDto) => {
     return { accessToken, refreshToken }
 }
 
-export const refresh = async (refreshToken: string) => {
+export const refresh = async (refreshToken: string): Promise<LoginResponse> => {
     if (!refreshToken) throw new AppError("Token is required", 401)
 
     const decoded = verifyRefreshToken(refreshToken)
@@ -66,9 +67,11 @@ export const refresh = async (refreshToken: string) => {
         relations: ["credential"]
     })
 
-    if (!user || user.credential.refreshToken !== refreshToken) throw new AppError("Invalid refresh token", 401)
+    if (!user) throw new AppError("Invalid refresh token", 401)
 
-    const isValid = await compareToken(refreshToken, user.credential.refreshToken)
+    if (!user.credential.refreshToken) throw new AppError("Invalid refresh token", 401)
+
+    const isValid = await compareToken(refreshToken, user.credential.refreshToken!)
     if (!isValid) throw new AppError("invalid refresh token", 401)
 
     const newAccessToken = generateAccessToken({
@@ -77,7 +80,7 @@ export const refresh = async (refreshToken: string) => {
     })
 
     const newRefreshToken = generateRefreshToken({
-        user: user.id
+        id: user.id
     })
 
     const hashed = await hashToken(newRefreshToken)
@@ -88,7 +91,9 @@ export const refresh = async (refreshToken: string) => {
     return { accessToken: newAccessToken, refreshToken: newRefreshToken }
 }
 
-export const logout = async (userId: string) => {
+
+
+export const logout = async (userId: string): Promise<LogoutResponse> => {
     const user = await userRepository.findOne({
         where: { id: userId },
         relations: ["credential"]
@@ -98,6 +103,8 @@ export const logout = async (userId: string) => {
 
     user.credential.refreshToken = null
     await credentialRepository.save(user.credential)
+
+    return { message: "Logged out successfully" }
 }
 
 export const forgotPassword = async (email: string) => {
