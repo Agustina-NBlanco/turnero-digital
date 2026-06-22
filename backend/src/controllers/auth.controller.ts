@@ -9,6 +9,7 @@ import {
 import { AppError } from "../utils/AppError";
 import { RegisterDto } from "../dtos/auth/register.dto";
 import { LoginDto } from "../dtos/auth/login.dto";
+import { RefreshTokenDto } from "../dtos/auth/refreshToken.dto";
 
 export const register = async (req: Request<{}, {}, RegisterDto>, res: Response) => {
     const user = await registerService(req.body)
@@ -20,7 +21,7 @@ export const login = async (req: Request<{}, {}, LoginDto>, res: Response) => {
     return res.status(200).json(data)
 }
 
-export const refreshToken = async (req: Request, res: Response) => {
+export const refreshToken = async (req: Request<{}, {}, RefreshTokenDto>, res: Response) => {
 
     const { refreshToken } = req.body
 
@@ -33,6 +34,6 @@ export const logout = async (req: Request, res: Response) => {
 
     if (!user) throw new AppError('Unauthorized', 401)
 
-    await logoutService(user.id)
-    return res.status(200).json({ message: "Logged out successfully" })
+    const response = await logoutService(user.id)
+    return res.status(200).json(response)
 }
