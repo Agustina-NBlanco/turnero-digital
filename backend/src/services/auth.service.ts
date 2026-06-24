@@ -10,6 +10,8 @@ import { compareToken, hashToken } from "../utils/hash";
 import { LoginResponse, LogoutResponse } from "../types/AuthResponses";
 import { generateResetToken, hashResetToken } from "../utils/crypto";
 import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
+import { resetPasswordTemplate } from "../templates/email/resetPasswordTemplate";
+import { sendEmail } from "../utils/sendEmail";
 
 const userRepository = AppDataSource.getRepository(User)
 const credentialRepository = AppDataSource.getRepository(Credential)
@@ -122,8 +124,16 @@ export const forgotPassword = async (email: string) => {
 
     await credentialRepository.save(user.credential)
 
-    console.log(`Reset Link: http://localhost:3000/reset-password?token=${token}`)
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`
 
+    const html = resetPasswordTemplate(resetLink)
+
+    sendEmail(
+        user.email,
+        "Recuperación de contraseña",
+        html
+    )
+        .catch(err => console.error("Email error:", err))
 }
 
 export const resetPassword = async (dto: ResetPasswordDto) => {
@@ -141,7 +151,7 @@ export const resetPassword = async (dto: ResetPasswordDto) => {
 
     if (!credential || !credential.resetTokenExpires) throw new AppError("Invalide or expired token", 400)
 
-    if(credential.resetTokenExpires < new Date()) throw new AppError("Token expired", 400)
+    if (credential.resetTokenExpires < new Date()) throw new AppError("Token expired", 400)
 
     const newPassword = await hashPassword(dto.password)
 
