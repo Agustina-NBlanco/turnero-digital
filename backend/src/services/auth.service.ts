@@ -12,6 +12,7 @@ import { generateResetToken, hashResetToken } from "../utils/crypto";
 import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
 import { resetPasswordTemplate } from "../templates/email/resetPasswordTemplate";
 import { sendEmail } from "../utils/sendEmail";
+import { welcomeTemplate } from "../templates/email/welcomeTemplate";
 
 const userRepository = AppDataSource.getRepository(User)
 const credentialRepository = AppDataSource.getRepository(Credential)
@@ -38,6 +39,14 @@ export const register = async (dto: RegisterDto): Promise<User> => {
         user
     })
     await credentialRepository.save(credential)
+
+    const html = welcomeTemplate(user.name)
+    sendEmail(
+        user.email,
+        "Bienvenido a Turnero Digital",
+        html
+    ).catch(err => console.error("Email error:", err))
+
     return user
 }
 
