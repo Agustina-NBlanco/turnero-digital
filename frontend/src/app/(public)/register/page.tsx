@@ -2,9 +2,9 @@
 
 import AuthContainer from "@/components/auth/AuthContainer"
 import AuthLeftSide from "@/components/auth/AuthLeftSide"
-import Button from "@/components/ui/Button"
-import Card from "@/components/ui/Card"
-import Input from "@/components/ui/Input"
+import Button from "@/components/ui/buttons/Button"
+import Card from "@/components/ui/cards/Card"
+import Input from "@/components/ui/forms/Input"
 import { RegisterSchema } from "@/lib/validations/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, Mail, User, IdCard, Calendar, HeartPulse } from "lucide-react"
