@@ -68,7 +68,7 @@ export default function RegisterPage() {
                                 <Input
                                     {...register("name")}
                                     placeholder="Ej: María Gonzáles"
-                                    className="placeholder:text-slate-500 text-slate-800 pl-10"
+                                    className="placeholder:text-slate-500 text-slate-800 pl-10 w-full"
                                 />
                             </div>
                             {errors.name && (
@@ -83,7 +83,7 @@ export default function RegisterPage() {
                                 <Input
                                     {...register("email")}
                                     placeholder="Ej: email@gmail.com"
-                                    className="placeholder:text-slate-500 text-slate-800 pl-10"
+                                    className="placeholder:text-slate-500 text-slate-800 pl-10 w-full"
                                 />
                             </div>
                             {errors.email && (
@@ -98,7 +98,7 @@ export default function RegisterPage() {
                                     type={showPassword ? "text" : "password"}
                                     {...register("password")}
                                     placeholder="********"
-                                    className="placeholder:text-slate-500 text-slate-800 pr-10"
+                                    className="placeholder:text-slate-500 text-slate-800 pr-10 w-full"
                                 />
                                 <button
                                     type="button"
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                                     type={showConfirmPassword ? "text" : "password"}
                                     {...register("confirmPassword")}
                                     placeholder="********"
-                                    className="placeholder:text-slate-500 text-slate-800 pr-10"
+                                    className="placeholder:text-slate-500 text-slate-800 pr-10 w-full"
                                 />
                                 <button
                                     type="button"
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                                     type="date"
                                     min="1900-01-01"
                                     max={new Date().toISOString().split("T")[0]}
-                                    className=" text-slate-800 placeholder:text-slate-500 pl-10"
+                                    className=" text-slate-800 placeholder:text-slate-500 pl-10 w-full"
                                     {...register("birthDate")}
                                 />
 
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                                 <Input
                                     {...register("dni")}
                                     placeholder="123456789"
-                                    className="placeholder:text-slate-500 text-slate-800 pl-10"
+                                    className="placeholder:text-slate-500 text-slate-800 pl-10 w-full"
                                 />
                             </div>
                         </div>
