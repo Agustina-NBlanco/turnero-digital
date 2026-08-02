@@ -3,7 +3,7 @@ import Avatar from "../../ui/data-display/Avatar";
 import Badge from "../../ui/data-display/Badge";
 import Button from "../../ui/buttons/Button";
 import { Pencil, Trash } from "lucide-react";
-import { doctorStatusVariant } from "@/types/enums/doctorStatus";
+import { doctorStatusVariant } from "@/constants/status/doctorStatusVariant";
 
 
 interface DoctorItemProps {
