@@ -18,7 +18,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({ children, variant = "primary", className = "", ...props }: ButtonProps) {
 
     const disabledClasses = props.disabled
-        ? "cursor-not-allowed opacity-50 hover:bg-inherit hover:text-inherit"
+        ? "cursor-not-allowed opacity-50"
         : "cursor-pointer"
     return (
         <button
