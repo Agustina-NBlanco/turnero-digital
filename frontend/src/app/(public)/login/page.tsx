@@ -62,7 +62,7 @@ export default function LoginPage() {
                 type="email"
                 {...register("email")}
                 placeholder="email@gmail.com"
-                className="text-slate-800 placeholder:text-slate-400"
+                className="text-slate-800 placeholder:text-slate-400 w-full"
               />
               {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
             </div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   placeholder="********"
-                  className="pr-10 text-slate-800"
+                  className="pr-10 text-slate-800 w-full"
                 />
                 <button
                   type="button"

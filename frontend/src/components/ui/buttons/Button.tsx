@@ -1,4 +1,4 @@
-const baseClasses = "inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors";
+const baseClasses = "inline-flex items-center justify-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors";
 
 const variants = {
     primary: "border border-slate-900 bg-slate-900 text-white hover:bg-slate-800",
