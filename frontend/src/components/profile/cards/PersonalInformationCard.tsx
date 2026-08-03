@@ -53,7 +53,7 @@ export default function PersonalInformationCard({
         <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
 
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-2xl font-bold text-slate-900 text-center sm:text-left">
                     Información personal
                 </h2>
 
