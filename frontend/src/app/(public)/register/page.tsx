@@ -5,6 +5,7 @@ import AuthLeftSide from "@/components/auth/AuthLeftSide"
 import Button from "@/components/ui/buttons/Button"
 import Card from "@/components/ui/cards/Card"
 import Input from "@/components/ui/forms/Input"
+import { useRegister } from "@/features/auth/hooks/useRegister"
 import { RegisterSchema } from "@/lib/validations/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, Mail, User, IdCard, Calendar, HeartPulse } from "lucide-react"
@@ -28,7 +29,11 @@ export default function RegisterPage() {
         mode: "onChange",
     })
 
-    const onSubmit = (data: RegisterFormData) => console.log(data)
+    const registerMutation = useRegister()
+
+    const onSubmit = (data: RegisterFormData) => {
+        registerMutation.mutate(data)
+    }
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-slate-100">
@@ -156,7 +161,7 @@ export default function RegisterPage() {
                             <div className="relative mt-1">
                                 <IdCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 <Input
-                                    {...register("dni")}
+                                    {...register("nDni")}
                                     placeholder="123456789"
                                     className="placeholder:text-slate-500 text-slate-800 pl-10 w-full"
                                 />
@@ -165,10 +170,10 @@ export default function RegisterPage() {
 
                         <Button
                             type="submit"
-                            disabled={!isValid}
+                            disabled={!isValid || registerMutation.isPending}
                             className="w-full h-11 bg-linear-to-r from-indigo-500 to-violet-500 text-white rounded-lg"
                         >
-                            Registrate
+                            {registerMutation.isPending ? "Creando cuenta..." : "Registrate"}
                         </Button>
 
                         <p className="text-sm text-center text-slate-500">
