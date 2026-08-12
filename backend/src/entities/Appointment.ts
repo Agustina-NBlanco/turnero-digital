@@ -16,21 +16,12 @@ export class Appointment {
     @Column()
     time!: string;
 
-    // @Column()
-    // dateTime!: Date;
-
     @Column({ type: "enum", enum: AppointmentStatus, default: AppointmentStatus.PENDING })
     status!: AppointmentStatus;
 
-    @ManyToOne(() => User, user => user.appointments, { nullable: true })
-    user?: User;
+    @ManyToOne(() => User, user => user.appointments)
+    user!: User;
 
     @ManyToOne(() => Doctor, doctor => doctor.appointments)
     doctor!: Doctor;
-
-    @Column({ nullable: true })
-    guestName?: string;
-
-    @Column({ nullable: true })
-    guestEmail?: string;
 }

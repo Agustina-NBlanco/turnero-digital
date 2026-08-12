@@ -20,8 +20,4 @@ export class UpdateUserDto {
     @IsNotEmpty()
     @Length(6, 20)
     nDni?: string;
-
-    @IsOptional()
-    @IsEnum(UserRole)
-    role?: UserRole
 }
