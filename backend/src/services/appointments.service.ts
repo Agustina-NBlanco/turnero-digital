@@ -9,7 +9,6 @@ import { AppointmentStatus } from "../enums/AppointmentStatus"
 import { User } from "../entities/User"
 import { buildAppointmentDateTime, getDayOfWeek } from "../utils/date.utils"
 import { DoctorSchedule } from "../entities/DoctorSchedule"
-import { ENV } from "../config/env"
 import { UserRole } from "../enums/UserRole"
 
 
@@ -19,7 +18,12 @@ const userRepository = AppDataSource.getRepository(User)
 const doctorScheduleRepository = AppDataSource.getRepository(DoctorSchedule)
 
 export const getAppointments = async (): Promise<Appointment[]> => {
-    return appointmentRepository.find()
+    return appointmentRepository.find({
+        relations: {
+            user: true,
+            doctor: true
+        }
+    })
 }
 
 export const getMyAppointments = async (userId: string): Promise<Appointment[]> => {
@@ -36,39 +40,45 @@ export const getMyAppointments = async (userId: string): Promise<Appointment[]> 
 }
 
 export const getAppointmentById = async (id: string): Promise<Appointment> => {
-    const appointment = await appointmentRepository.findOne({ where: { id } })
+    const appointment = await appointmentRepository.findOne({
+        where: { id },
+        relations: {
+            user: true,
+            doctor: true
+        }
+    })
 
     if (!appointment) throw new AppError("Appointment not found", 404)
 
     return appointment
 }
 
-const mapToAppointment = (dto: CreateAppointmentDto, doctor: Doctor): Partial<Appointment> => {
+const mapToAppointment = (dto: CreateAppointmentDto, doctor: Doctor, user: User): Partial<Appointment> => {
     return {
         date: new Date(dto.date),
         time: dto.time,
+        status: AppointmentStatus.PENDING,
         doctor,
-        ...(dto.userId && { user: { id: dto.userId } as any }),
-        ...(dto.guestName && { guestName: dto.guestName }),
-        ...(dto.guestEmail && { guestEmail: dto.guestEmail })
+        user
     }
 }
 
-export const createAppointment = async (dto: CreateAppointmentDto): Promise<Appointment> => {
-
-    if (!ENV.ALLOW_GUEST_APPOINTMENTS && !dto.userId) throw new AppError("You must be logged in to create an appointment", 401)
+export const createAppointment = async (dto: CreateAppointmentDto, authenticatedUserId: string, role: UserRole): Promise<Appointment> => {
 
     const appointmentDate = new Date(dto.date)
     const dayOfWeek = getDayOfWeek(dto.date)
 
     if (appointmentDate < new Date()) throw new AppError('You cannot create an appointment in the past', 400)
 
-    if (dto.userId && (dto.guestName || dto.guestEmail)) throw new AppError("You cannot provide userId and guest data at the same time", 400)
-    if (!dto.userId && (!dto.guestName || !dto.guestEmail)) throw new AppError("Guest must provide both name and email", 400)
-
     const doctor = await doctorRepository.findOne({ where: { id: dto.doctorId } })
 
     if (!doctor) throw new AppError('Doctor not found', 404)
+
+    const userId = role === UserRole.ADMIN && dto.userId ? dto.userId : authenticatedUserId
+
+    const user = await userRepository.findOne({ where: { id: userId } })
+
+    if (!user) throw new AppError('User not found', 404)
 
     const schedules = await doctorScheduleRepository.find({
         where: {
@@ -84,12 +94,6 @@ export const createAppointment = async (dto: CreateAppointmentDto): Promise<Appo
     })
 
     if (!isWithinSchedule) throw new AppError("Appointment is outside doctor's working hours", 400)
-
-
-    if (dto.userId) {
-        const user = await userRepository.findOne({ where: { id: dto.userId } })
-        if (!user) throw new AppError('User not found', 404)
-    }
 
     const start = new Date(dto.date)
     start.setHours(0, 0, 0, 0)
@@ -107,7 +111,7 @@ export const createAppointment = async (dto: CreateAppointmentDto): Promise<Appo
 
     if (existingAppointment) throw new AppError('This doctor already has an appointment at the specified date and time', 400)
 
-    const appointment = appointmentRepository.create(mapToAppointment(dto, doctor))
+    const appointment = appointmentRepository.create(mapToAppointment(dto, doctor, user))
 
     try {
         return await appointmentRepository.save(appointment)
@@ -129,6 +133,10 @@ export const updateAppointment = async (id: string, dto: UpdateAppointmentDto, u
 
     if (existingAppointment.status === AppointmentStatus.CANCELLED) throw new AppError("Cannot modify a cancelled appointment", 400)
 
+    if (dto.status && dto.status !== AppointmentStatus.CANCELLED && role !== UserRole.ADMIN) {
+        throw new AppError("Only admins can change the appointment status", 403)
+    }
+
     if (dto.status === AppointmentStatus.CANCELLED) {
 
         const appointmentDateTime = buildAppointmentDateTime(existingAppointment.date, existingAppointment.time)
@@ -146,7 +154,7 @@ export const updateAppointment = async (id: string, dto: UpdateAppointmentDto, u
     return await appointmentRepository.save(existingAppointment)
 }
 
-export const deleteAppointment = async (id: string, userId: string, role: UserRole): Promise<Appointment> => {
+export const deleteAppointment = async (id: string, userId: string, role: UserRole): Promise<void> => {
     const existingAppointment = await appointmentRepository.findOne({ where: { id }, relations: { user: true } })
 
     if (!existingAppointment) throw new AppError("Appointment not found", 404)
@@ -155,5 +163,5 @@ export const deleteAppointment = async (id: string, userId: string, role: UserRo
 
     existingAppointment.status = AppointmentStatus.CANCELLED
 
-    return await appointmentRepository.save(existingAppointment)
+    await appointmentRepository.save(existingAppointment)
 }
