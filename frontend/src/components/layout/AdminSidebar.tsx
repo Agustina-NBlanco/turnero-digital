@@ -6,6 +6,7 @@ import Button from "../ui/buttons/Button";
 import { usePathname } from "next/navigation";
 import Avatar from "../ui/data-display/Avatar";
 import { adminMenuItems } from "@/constants/sidebar/admin";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 interface AdminSidebarProps {
     onNavigate?: () => void
@@ -15,6 +16,8 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
 
     const pathName = usePathname()
+
+    const logoutMutation = useLogout();
 
     return (
         <aside className="flex h-full w-full flex-col bg-slate-900 text-white shadow-xl">
@@ -83,6 +86,7 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
                 <Button
                     variant="secondary"
                     className="mt-4 w-full"
+                    onClick={() => logoutMutation.mutate()}
                 >
                     <LogOut className="h-5 w-5" />
                     Cerrar sesión

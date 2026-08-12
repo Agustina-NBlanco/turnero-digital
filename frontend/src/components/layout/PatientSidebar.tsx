@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Avatar from "../ui/data-display/Avatar";
 import Button from "../ui/buttons/Button";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 interface PatientSidebarProps {
     onNavigate?: () => void
@@ -15,6 +16,7 @@ interface PatientSidebarProps {
 export default function PatientSidebar({ onNavigate }: PatientSidebarProps) {
 
     const pathname = usePathname()
+    const logoutMutation = useLogout();
 
     return (
         <aside className="flex h-full w-full flex-col border-r border-slate-200 bg-white">
@@ -90,6 +92,7 @@ export default function PatientSidebar({ onNavigate }: PatientSidebarProps) {
                 <Button
                     variant="secondary"
                     className="mt-4 w-full"
+                    onClick={() => logoutMutation.mutate()}
                 >
                     <LogOut className="h-5 w-5" />
                     Cerrar sesión

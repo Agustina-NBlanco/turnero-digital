@@ -1,49 +1,80 @@
+import { appointmentStatus } from "@/types/enums/appointmentStatus";
 import { Appointment } from "@/types/models/appointment";
 
 export const appointments: Appointment[] = [
     {
         id: "1",
-        patient: "María González",
-        doctor: "Dr. Juan Pérez",
-        specialty: "Consulta general",
+        user: {
+            id: "user-1",
+            name: "María González"
+        },
+        doctor: {
+            id: "doctor-1",
+            name: "Dr. Juan Pérez",
+            specialty: "Consulta general"
+        },
         date: "2026-06-26",
         time: "09:00",
-        status: "Confirmado"
+        status: appointmentStatus.CONFIRMED
     },
     {
         id: "2",
-        patient: "Juan López",
-        doctor: "Dra. Ana García",
-        specialty: "Cardiología",
+        user: {
+            id: "user-2",
+            name: "Juan López"
+        },
+        doctor: {
+            id: "doctor-2",
+            name: "Dra. Ana García",
+            specialty: "Cardiología"
+        },
         date: "2026-06-26",
         time: "10:00",
-        status: "Pendiente"
+        status: appointmentStatus.PENDING
     },
     {
         id: "3",
-        patient: "Laura Rodríguez",
-        doctor: "Dra. Ana García",
-        specialty: "Traumatología",
+        user: {
+            id: "user-3",
+            name: "Laura Rodríguez"
+        },
+        doctor: {
+            id: "doctor-2",
+            name: "Dra. Ana García",
+            specialty: "Traumatología"
+        },
         date: "2026-06-26",
         time: "11:00",
-        status: "Cancelado"
+        status: appointmentStatus.CANCELLED
     },
     {
         id: "4",
-        patient: "Pedro Rodríguez",
-        doctor: "Dr. Martín López",
-        specialty: "Pediatria",
+        user: {
+            id: "user-4",
+            name: "Pedro Rodríguez"
+        },
+        doctor: {
+            id: "doctor-3",
+            name: "Dr. Martín López",
+            specialty: "Pediatría"
+        },
         date: "2026-06-26",
         time: "12:00",
-        status: "Confirmado"
+        status: appointmentStatus.CONFIRMED
     },
     {
         id: "5",
-        patient: "María López",
-        doctor: "Dr. Martín López",
-        specialty: "Consulta general",
+        user: {
+            id: "user-5",
+            name: "María López"
+        },
+        doctor: {
+            id: "doctor-3",
+            name: "Dr. Martín López",
+            specialty: "Consulta general"
+        },
         date: "2026-06-26",
         time: "13:00",
-        status: "Completado"
+        status: appointmentStatus.COMPLETED
     }
 ]

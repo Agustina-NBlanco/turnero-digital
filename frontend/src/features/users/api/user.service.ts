@@ -1,6 +1,8 @@
 import api from "@/lib/api/axios";
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
 import { User } from "@/types/models/user";
+import { UpdateUserDto } from "../dto/updateUser.dto";
+import { UpdateUserRoleDto } from "../dto/updateUserRole.dto";
 
 export const userService = {
 
@@ -22,11 +24,17 @@ export const userService = {
         return data
     },
 
-    // async createUser(dto: CreateUserDto): Promise<User> {}
+    async updateUser(id: string, dto: UpdateUserDto): Promise<User> {
+        const { data } = await api.put<User>(`${API_ENDPOINTS.users}/${id}`, dto);
 
-    // async updateUser(id: string, dto: UpdateUserDto): Promise<User> {}
+        return data
+    },
 
-    // async updateUserRole(id: string, dto: UpdateUserRoleDto): Promise<User> {}
+    async updateUserRole(id: string, dto: UpdateUserRoleDto): Promise<User> {
+        const { data } = await api.patch<User>(`${API_ENDPOINTS.users}/${id}/role`, dto)
+
+        return data
+    },
 
     async deleteUser(id: string): Promise<void> {
         await api.delete(`${API_ENDPOINTS.users}/${id}`);

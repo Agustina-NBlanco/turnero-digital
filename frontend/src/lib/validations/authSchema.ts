@@ -54,7 +54,7 @@ export const RegisterSchema = z.object({
             return age >= 18
         }, "Debes ser mayor de 18 años"),
 
-    dni: z
+    nDni: z
         .string()
         .min(7, "DNI Inválido")
         .max(8, "DNI Inválido")

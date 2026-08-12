@@ -5,6 +5,7 @@ import AuthLeftSide from "@/components/auth/AuthLeftSide"
 import Button from "@/components/ui/buttons/Button"
 import Card from "@/components/ui/cards/Card"
 import Input from "@/components/ui/forms/Input"
+import { useLogin } from "@/features/auth/hooks/useLogin"
 import { LoginSchema } from "@/lib/validations/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, HeartPulse } from "lucide-react"
@@ -24,7 +25,11 @@ export default function LoginPage() {
       mode: "onChange"
     })
 
-  const onSubmit = (data: LoginFormData) => console.log(data)
+  const loginMutation = useLogin()
+
+  const onSubmit = (data: LoginFormData) => {
+    loginMutation.mutate(data)
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-slate-100">

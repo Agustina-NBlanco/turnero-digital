@@ -25,7 +25,7 @@ export default function UpcomingAppointments() {
                             {appointments.map(appointment => (
                                 <AppointmentItem
                                     key={appointment.id}
-                                    {...appointment}
+                                    appointment={appointment}
                                 />
                             ))}
                         </Table>
@@ -35,7 +35,7 @@ export default function UpcomingAppointments() {
                         {appointments.map(appointment => (
                             <AppointmentCard
                                 key={appointment.id}
-                                {...appointment}
+                                appointment={appointment}
                             >
                                 <Link
                                     href={`/admin/appointments/${appointment.id}`}
