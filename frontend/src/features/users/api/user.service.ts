@@ -14,7 +14,7 @@ export const userService = {
 
     async getCurrentUser(): Promise<User> {
         const { data } = await api.get<User>(`${API_ENDPOINTS.users}/me`);
-
+        
         return data;
     },
 
@@ -26,6 +26,12 @@ export const userService = {
 
     async updateUser(id: string, dto: UpdateUserDto): Promise<User> {
         const { data } = await api.put<User>(`${API_ENDPOINTS.users}/${id}`, dto);
+
+        return data
+    },
+
+    async updateCurrentUser(dto: UpdateUserDto): Promise<User> {
+        const { data } = await api.put<User>(`${API_ENDPOINTS.users}/me`, dto);
 
         return data
     },

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser"
+import { useSession } from "@/features/auth/hooks/useSession"
 import { userRole } from "@/types/enums/userRole"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -8,20 +8,20 @@ import { useEffect } from "react"
 export function usePublicRoute() {
     const router = useRouter()
 
-    const { data: user, isLoading } = useCurrentUser()
+    const { data: session, isLoading } = useSession()
 
     useEffect(() => {
         if (isLoading) return;
 
-        if (!user) return
+        if (!session) return
 
         router.replace(
-            user.role === userRole.Admin ? "/admin/dashboard" : "/patient/dashboard"
+            session.role === userRole.Admin ? "/admin/dashboard" : "/patient/dashboard"
         )
-    }, [user, isLoading, router])
+    }, [session, isLoading, router])
 
     return {
         isLoading,
-        canRender: !isLoading && !user,
+        canRender: !isLoading && !session,
     }
 }

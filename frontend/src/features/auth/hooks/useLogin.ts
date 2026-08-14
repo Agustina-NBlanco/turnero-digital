@@ -14,7 +14,7 @@ export function useLogin() {
         onSuccess: async () => {
             try {
                 const session = await queryClient.fetchQuery({
-                    queryKey: ["currentUser"],
+                    queryKey: ["session"],
                     queryFn: async () => {
                         const session = await authService.getSession()
                         return session.user

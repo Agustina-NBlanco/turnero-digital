@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { authService } from "../api/auth.service";
 
 
-export function useCurrentUser() {
+export function useSession() {
     return useQuery({
-        queryKey: ["currentUser"],
+        queryKey: ["session"],
         queryFn: async () => {
             const session = await authService.getSession()
             return session.user
