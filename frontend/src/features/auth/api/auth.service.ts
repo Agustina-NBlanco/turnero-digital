@@ -5,6 +5,7 @@ import { LoginDto } from "../dto/login.dto";
 import { LoginResponse, LogoutResponse } from "../types/auth";
 import { ForgotPasswordDto } from "../dto/forgotPassword.dto";
 import { ResetPasswordDto } from "../dto/resetPassword.dto";
+import { ChangePasswordDto } from "../dto/changePassword.dto";
 
 
 export const authService = {
@@ -41,5 +42,9 @@ export const authService = {
     async getSession() {
         const { data } = await api.get(`${API_ENDPOINTS.auth}/session`)
         return data
+    },
+
+    async changePassword(dto: ChangePasswordDto): Promise<void> {
+        await api.put(`${API_ENDPOINTS.auth}/change-password`, dto);
     }
 }

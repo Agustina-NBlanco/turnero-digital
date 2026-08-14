@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import Avatar from "../ui/data-display/Avatar";
 import { adminMenuItems } from "@/constants/sidebar/admin";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
+import Skeleton from "../ui/feedback/Skeleton";
 
 interface AdminSidebarProps {
     onNavigate?: () => void
@@ -18,6 +20,8 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
     const pathName = usePathname()
 
     const logoutMutation = useLogout();
+
+    const { data: user, isLoading } = useCurrentUser()
 
     return (
         <aside className="flex h-full w-full flex-col bg-slate-900 text-white shadow-xl">
@@ -75,12 +79,34 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
                     onClick={onNavigate}
                     className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-800"
                 >
-                    <Avatar name="Alejandro Cejas" size="md" />
+                    {isLoading ? (
+                        <>
+                            <Skeleton className="h-10 w-10 shrink-0 rounded-full bg-slate-700" />
 
-                    <div className="min-w-0">
-                        <p className="truncate font-medium">Alejandro</p>
-                        <p className="truncate text-sm text-slate-400">Administrador</p>
-                    </div>
+                            <div className="min-w-0 space-y-2">
+                                <Skeleton className="h-4 w-24 bg-slate-700" />
+                                <Skeleton className="h-3 w-16 bg-slate-700" />
+                            </div>
+                        </>
+                    ) : user ? (
+                        <>
+                            <Avatar
+                                name={user.name}
+                                size="md"
+                            />
+
+                            <div className="min-w-0">
+                                <p className="truncate font-medium">
+                                    {user.name}
+                                </p>
+
+                                <p className="truncate text-sm text-slate-400">
+                                    {user.role}
+                                </p>
+                            </div>
+                        </>
+                    ) : null}
+
                 </Link>
 
                 <Button

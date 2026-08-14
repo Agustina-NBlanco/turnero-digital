@@ -5,10 +5,11 @@ interface EditableProfileFieldProps {
     label: string;
     value: string;
     disabled: boolean;
+    type?: string;
     onChange: (value: string) => void;
 }
 
-export default function EditableProfileField({ icon, label, value, disabled, onChange }: EditableProfileFieldProps) {
+export default function EditableProfileField({ icon, label, value, disabled, type, onChange }: EditableProfileFieldProps) {
     return (
         <div className="space-y-1">
             <div className="mb-1 flex items-center gap-2 text-sm font-medium text-slate-500">
@@ -17,7 +18,7 @@ export default function EditableProfileField({ icon, label, value, disabled, onC
             </div>
 
             <input
-                type="text"
+                type={type}
                 value={value}
                 disabled={disabled}
                 onChange={e => onChange(e.target.value)}

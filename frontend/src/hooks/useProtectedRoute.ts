@@ -1,6 +1,7 @@
 "use client"
 
-import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+
+import { useSession } from "@/features/auth/hooks/useSession";
 import { userRole, UserRole } from "@/types/enums/userRole";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -9,28 +10,28 @@ import { useEffect } from "react";
 export function useProtectedRoute(allowedRoles: UserRole[]) {
     const router = useRouter()
 
-    const { data: user, isLoading, isError } = useCurrentUser()
+    const { data: session, isLoading, isError } = useSession()
 
     useEffect(() => {
         if (isLoading) return;
 
-        if (isError || !user) {
+        if (isError || !session) {
             router.replace("/login")
             return
         }
 
-        if (!allowedRoles.includes(user.role)) {
+        if (!allowedRoles.includes(session.role)) {
             router.replace(
-                user.role === userRole.Admin ? "/admin/dashboard" : "/patient/dashboard"
+                session.role === userRole.Admin ? "/admin/dashboard" : "/patient/dashboard"
             )
         }
-    }, [user, isLoading, isError, allowedRoles, router])
+    }, [session, isLoading, isError, allowedRoles, router])
 
 
 
     return {
-        user,
+        user: session,
         isLoading,
-        isAuthorized: !!user && allowedRoles.includes(user.role),
+        isAuthorized: !!session && allowedRoles.includes(session.role),
     }
 }
