@@ -22,6 +22,10 @@ export const getCurrentUser = async (id: string): Promise<User> => {
     return user
 }
 
+export const updateCurrentUser = async (id: string, dto: UpdateUserDto): Promise<User> => {
+    return await updateUser(id, dto)
+}
+
 export const getUserById = async (id: string): Promise<User> => {
     const user = await userRepository.findOne({ where: { id } })
     if (!user) throw new AppError('User not found', 404)

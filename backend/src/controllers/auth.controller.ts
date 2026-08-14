@@ -5,7 +5,8 @@ import {
     refresh as refreshService,
     logout as logoutService,
     forgotPassword as forgotPasswordService,
-    resetPassword as resetPasswordService
+    resetPassword as resetPasswordService,
+    changePassword as changePasswordService
 
 } from "../services/auth.service";
 import { AppError } from "../utils/AppError";
@@ -14,6 +15,7 @@ import { LoginDto } from "../dtos/auth/login.dto";
 import { ForgotPasswordDto } from "../dtos/auth/forgot-password.dto";
 import { ResetPasswordDto } from "../dtos/auth/reset-password.dto";
 import { ENV } from "../config/env";
+import { ChangePasswordDto } from "../dtos/auth/change-password.dto";
 
 export const register = async (req: Request<{}, {}, RegisterDto>, res: Response) => {
     const user = await registerService(req.body)
@@ -125,4 +127,10 @@ export const session = async (req: Request, res: Response) => {
             role: req.user!.role
         }
     })
+}
+
+export const changePassword = async (req: Request<{}, {}, ChangePasswordDto>, res: Response) => {
+    await changePasswordService(req.user!.id, req.body)
+
+    return res.status(200).json({ message: "Password updated successfully" })
 }
