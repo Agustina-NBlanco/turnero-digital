@@ -7,7 +7,7 @@ import { Appointment } from "../entities/Appointment"
 import { Doctor } from "../entities/Doctor"
 import { AppError } from "../utils/AppError"
 import { generateTimeSlots } from "../utils/generateTimeSlots"
-import { getDayOfWeek } from "../utils/date.utils"
+import { getDayOfWeek, parseDateOnly } from "../utils/date.utils"
 
 
 const doctorRepository = AppDataSource.getRepository(Doctor)
@@ -64,7 +64,7 @@ export const deleteDoctor = async (id: string): Promise<void> => {
 
     const appointments = await appointmentsRepository.count({ where: { doctor: { id } } })
 
-    if(appointments > 0) throw new AppError('Cannot delete doctor with associated appointments', 400)
+    if (appointments > 0) throw new AppError('Cannot delete doctor with associated appointments', 400)
 
     await doctorRepository.remove(existingDoctor)
 }
@@ -93,10 +93,9 @@ export const getDoctorAvailability = async (id: string, date: string): Promise<s
         availableSlots.push(...generateTimeSlots(schedule.startTime, schedule.endTime, APPOINTMENT_INTERVAL))
     }
 
-    const start = new Date(date)
-    start.setHours(0, 0, 0, 0)
+    const start = parseDateOnly(date)
 
-    const end = new Date(date)
+    const end = parseDateOnly(date)
     end.setHours(23, 59, 59, 999)
 
     const appointments = await appointmentsRepository.find({

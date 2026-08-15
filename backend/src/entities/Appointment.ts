@@ -1,10 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AppointmentStatus } from "../enums/AppointmentStatus";
 import { User } from "./User";
 import { Doctor } from "./Doctor";
 
 
-@Unique(["date", "time", "doctor"])
+@Index("IDX_appointments_date_time_doctor_active",
+    ["date", "time", "doctor"],
+    {
+        unique: true,
+        where: `"status" <> 'cancelled'`
+    }
+)
 @Entity({ name: "appointments" })
 export class Appointment {
     @PrimaryGeneratedColumn("uuid")
