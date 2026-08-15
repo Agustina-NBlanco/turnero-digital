@@ -9,6 +9,7 @@ import { adminMenuItems } from "@/constants/sidebar/admin";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useCurrentUser } from "@/features/users/hooks/useCurrentUser";
 import Skeleton from "../ui/feedback/Skeleton";
+import { userRoleLabel } from "@/constants/user/userRoleLabel";
 
 interface AdminSidebarProps {
     onNavigate?: () => void
@@ -101,7 +102,7 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
                                 </p>
 
                                 <p className="truncate text-sm text-slate-400">
-                                    {user.role}
+                                    {userRoleLabel[user.role]}
                                 </p>
                             </div>
                         </>

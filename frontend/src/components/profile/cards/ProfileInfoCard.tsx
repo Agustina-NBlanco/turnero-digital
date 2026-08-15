@@ -1,4 +1,5 @@
 import Avatar from "@/components/ui/data-display/Avatar";
+import { userRoleLabel } from "@/constants/user/userRoleLabel";
 import { User } from "@/types/models/user";
 
 interface ProfileInfoCardProps {
@@ -25,7 +26,7 @@ export default function ProfileInfoCard({ user }: ProfileInfoCardProps) {
                     </h1>
 
                     <p className="mt-1 text-slate-500">
-                        {user.role}
+                        {userRoleLabel[user.role]}
                     </p>
                 </div>
 

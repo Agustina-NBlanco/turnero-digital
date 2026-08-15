@@ -24,7 +24,7 @@ export default function UserForm({ user, onCancel }: UserFormProps) {
             email: user?.email ?? "",
             nDni: user?.nDni ?? "",
             birthDate: user?.birthDate
-                ? new Date(user.birthDate).toISOString().split("T")[0]
+                ? user.birthDate.split("T")[0]
                 : "",
         })
     }, [user, reset])

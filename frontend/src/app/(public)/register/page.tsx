@@ -6,6 +6,7 @@ import Button from "@/components/ui/buttons/Button"
 import Card from "@/components/ui/cards/Card"
 import Input from "@/components/ui/forms/Input"
 import { useRegister } from "@/features/auth/hooks/useRegister"
+import { getLocaleDateString } from "@/lib/utils/getLocalDateString"
 import { RegisterSchema } from "@/lib/validations/authSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, Mail, User, IdCard, Calendar, HeartPulse } from "lucide-react"
@@ -144,7 +145,7 @@ export default function RegisterPage() {
                                 <Input
                                     type="date"
                                     min="1900-01-01"
-                                    max={new Date().toISOString().split("T")[0]}
+                                    max={getLocaleDateString()}
                                     className=" text-slate-800 placeholder:text-slate-500 pl-10 w-full"
                                     {...register("birthDate")}
                                 />

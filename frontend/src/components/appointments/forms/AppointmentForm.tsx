@@ -92,6 +92,7 @@ export default function AppointmentForm({ appointment, onCancel }: AppointmentFo
         if (appointment) {
 
             const updateData: UpdateAppointmentDto = {
+                doctorId: data.doctorId,
                 date: data.date,
                 time: data.time,
                 ...(data.status && { status: data.status })
