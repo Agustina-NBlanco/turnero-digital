@@ -29,6 +29,7 @@ export default function AppointmentsMobile({ appointments, onEdit, onDelete }: A
                             <Link href={`/admin/appointments/${appointment.id}`} className="w-full">
                                 <Button variant="secondary" className="w-full justify-center">
                                     <Eye className="h-4 w-4" />
+                                    Ver detalle
                                 </Button>
                             </Link>
 

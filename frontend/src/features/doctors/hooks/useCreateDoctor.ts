@@ -10,6 +10,9 @@ export function useCreateDoctor() {
         mutationFn: doctorService.createDoctor,
 
         onSuccess: () => {
+
+            queryClient.invalidateQueries({ queryKey: ["dashboardStats"] })
+
             queryClient.invalidateQueries({ queryKey: ["doctors"] })
 
             toast.success("Médico creado correctamente")

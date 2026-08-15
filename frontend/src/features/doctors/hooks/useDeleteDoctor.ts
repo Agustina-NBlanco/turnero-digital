@@ -10,6 +10,9 @@ export function useDeleteDoctor() {
         mutationFn: doctorService.deleteDoctor,
 
         onSuccess: () => {
+
+            queryClient.invalidateQueries({ queryKey: ["dashboardStats"] })
+
             queryClient.invalidateQueries({ queryKey: ["doctors"] })
 
             toast.success("Médico eliminado correctamente")

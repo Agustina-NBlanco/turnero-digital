@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { parseDateOnly } from "../utils/parseDateOnly"
 
 export const LoginSchema = z.object({
     email: z.string().email("Email Inválido"),
@@ -37,11 +38,11 @@ export const RegisterSchema = z.object({
         .min(1, "Debes ingresar tu fecha de nacimiento")
         .refine((date) => {
 
-            const birth = new Date(date)
+            const birth = parseDateOnly(date)
             if (isNaN(birth.getTime())) return false
 
             const today = new Date()
-            const minDate = new Date("1900-01-01")
+            const minDate = parseDateOnly("1900-01-01")
             if (birth < minDate || birth > today) return false
 
 

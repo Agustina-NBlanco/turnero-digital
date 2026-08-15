@@ -6,6 +6,7 @@ import { Appointment } from "@/types/models/appointment"
 import Link from "next/link"
 import { appointmentStatusVariant } from "@/constants/status/appointmentStatusVariant"
 import { appointmentStatusLabel } from "@/constants/status/appointmentStatusLabel"
+import { formatDate } from "@/lib/utils/formatDate"
 
 
 interface AppointmentItemProps {
@@ -29,7 +30,7 @@ export default function AppointmentItem({ appointment }: AppointmentItemProps) {
             </td>
             <td className="px-3 lg:px-6 py-5">
                 <div className="space-y-1">
-                    <div>{appointment.date}</div>
+                    <div>{formatDate(appointment.date)}</div>
 
                     <div className="text-sm text-slate-500">
                         {appointment.time}
