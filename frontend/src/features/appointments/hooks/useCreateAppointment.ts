@@ -15,6 +15,8 @@ export function useCreateAppointment() {
 
             queryClient.invalidateQueries({ queryKey: ["myAppointments"] })
 
+            queryClient.invalidateQueries({ queryKey: ["doctorAvailability"] })
+
             toast.success("Turno creado correctamente")
         },
 

@@ -22,6 +22,8 @@ export function useUpdateAppointment() {
 
             queryClient.invalidateQueries({ queryKey: ["appointment", variables.id] })
 
+            queryClient.invalidateQueries({ queryKey: ["doctorAvailability"] })
+
             toast.success("Turno actualizado correctamente")
         },
 

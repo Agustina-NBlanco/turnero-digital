@@ -1,6 +1,15 @@
 import { z } from "zod"
 import { parseDateOnly } from "../utils/parseDateOnly"
 
+export const PasswordSchema = z
+    .string()
+    .min(8, "Debe contener al menos 8 caracteres")
+    .max(30, "Es demasiado larga la contraseña")
+    .regex(/[A-Z]/, "Debe contener una letra mayúscula")
+    .regex(/[a-z]/, "Debe contener una letra minúscula")
+    .regex(/[0-9]/, "Debe contener al menos un número")
+    .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial")
+
 export const LoginSchema = z.object({
     email: z.string().email("Email Inválido"),
     password: z.string().min(8, "Minimo 8 caracteres")
@@ -20,14 +29,7 @@ export const RegisterSchema = z.object({
         .email("Email Inválido")
         .toLowerCase(),
 
-    password: z
-        .string()
-        .min(8, "Debe contener al menos 8 caracteres")
-        .max(30, "Es demasiado larga la contraseña")
-        .regex(/[A-Z]/, "Debe contener una letra mayúscula")
-        .regex(/[a-z]/, "Debe contener una letra minúscula")
-        .regex(/[0-9]/, "Debe contener al menos un número")
-        .regex(/[^A-Za-z0-9]/, "Debe contener al menos un carácter especial"),
+    password: PasswordSchema,
 
     confirmPassword: z
         .string()
@@ -62,6 +64,42 @@ export const RegisterSchema = z.object({
         .regex(/^\d+$/, "El DNI solo puede contener números"),
 })
     .refine(data => data.password === data.confirmPassword, {
+        path: ["confirmPassword"],
+        message: "Las contraseñas no coinciden"
+    })
+
+export const ForgotPasswordSchema = z.object({
+    email: z
+        .string()
+        .trim()
+        .email("Email Inválido")
+        .toLowerCase(),
+})
+
+export const ResetPasswordSchema = z.object({
+    password: PasswordSchema,
+
+    confirmPassword: z
+        .string()
+        .min(1, "Confirmá tu contraseña"),
+})
+    .refine(data => data.password === data.confirmPassword, {
+        path: ["confirmPassword"],
+        message: "Las contraseñas no coinciden"
+    })
+
+export const ChangePasswordSchema = z.object({
+    currentPassword: z
+        .string()
+        .min(1, "Ingresá tu contraseña actual"),
+
+    newPassword: PasswordSchema,
+
+    confirmPassword: z
+        .string()
+        .min(1, "Confirmá tu contraseña"),
+})
+    .refine(data => data.newPassword === data.confirmPassword, {
         path: ["confirmPassword"],
         message: "Las contraseñas no coinciden"
     })

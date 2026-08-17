@@ -17,8 +17,7 @@ api.interceptors.response.use(response => response, async error => {
     if (
         error.response?.status === 401 &&
         !originalRequest.url?.includes("/auth/login") &&
-        !originalRequest.url?.includes("/auth/refresh") &&
-        !originalRequest.url?.includes("/auth/session")
+        !originalRequest.url?.includes("/auth/refresh")
     ) {
 
         if (originalRequest._retry) {

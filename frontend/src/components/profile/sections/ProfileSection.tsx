@@ -5,6 +5,7 @@ import PersonalInformationCard from "../cards/PersonalInformationCard";
 import ProfileInfoCard from "../cards/ProfileInfoCard";
 import SecurityCard from "../cards/SecurityCard";
 import PageHeader from "@/components/shared/headers/PageHeader";
+import Loader from "@/components/ui/feedback/Loader";
 
 export default function ProfileSection() {
 
@@ -18,9 +19,10 @@ export default function ProfileSection() {
                     subtitle="Consultá y administrá la información de tu cuenta"
                 />
 
-                <div className="py-12 text-center text-slate-500">
-                    Cargando perfil...
-                </div>
+                <Loader
+                    title="Cargando perfil"
+                    description="Obteniendo la información de tu cuenta"
+                />
             </main>
         )
     }

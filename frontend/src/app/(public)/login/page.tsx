@@ -92,16 +92,18 @@ export default function LoginPage() {
               </div>
 
               {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+
+              {loginMutation.isError && (
+                <p className="text-xs text-red-500">
+                  Email o contraseña incorrectos
+                </p>
+              )}
             </div>
 
-            <div className="flex justify-between text-sm">
-              <label className="flex items-center gap-2 text-slate-600">
-                <input type="checkbox" className="accent-indigo-600" />
-                Recordarme
-              </label>
-              <span className="text-indigo-600 hover:underline cursor-pointer">
+            <div className=" text-sm">
+              <Link href="/forgot-password" className="text-indigo-600 hover:underline">
                 ¿Olvidaste tu contraseña?
-              </span>
+              </Link>
             </div>
 
             <Button
