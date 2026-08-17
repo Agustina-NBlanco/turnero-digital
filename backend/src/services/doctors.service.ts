@@ -1,4 +1,4 @@
-import { Between } from "typeorm"
+import { Between, Not } from "typeorm"
 import { APPOINTMENT_INTERVAL } from "../config/constants"
 import { AppDataSource } from "../config/data-source"
 import { CreateDoctorDto } from "../dtos/doctor/create-doctor.dto"
@@ -8,6 +8,7 @@ import { Doctor } from "../entities/Doctor"
 import { AppError } from "../utils/AppError"
 import { generateTimeSlots } from "../utils/generateTimeSlots"
 import { getDayOfWeek, parseDateOnly } from "../utils/date.utils"
+import { AppointmentStatus } from "../enums/AppointmentStatus"
 
 
 const doctorRepository = AppDataSource.getRepository(Doctor)
@@ -101,7 +102,8 @@ export const getDoctorAvailability = async (id: string, date: string): Promise<s
     const appointments = await appointmentsRepository.find({
         where: {
             doctor: { id },
-            date: Between(start, end)
+            date: Between(start, end),
+            status: Not(AppointmentStatus.CANCELLED)
         }
     })
 
