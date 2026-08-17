@@ -58,7 +58,7 @@ export default function AdminSidebar({ onNavigate }: AdminSidebarProps) {
                                     className={`
                                     flex items-center gap-3 rounded-lg px-3 py-2 transition-colors
                                         ${isActive
-                                            ? "border-l-4 border-blue-500 bg-slate-800 text-white"
+                                            ? "border-l-4 border-violet-600 bg-slate-800 text-white"
                                             : "text-slate-300 hover:bg-slate-800 hover:text-white"
                                         }`}
                                 >

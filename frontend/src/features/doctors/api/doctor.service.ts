@@ -17,6 +17,14 @@ export const doctorService = {
         return data;
     },
 
+    async getDoctorAvailability(id: string, date: string): Promise<string[]> {
+        const { data } = await api.get<string[]>(`${API_ENDPOINTS.doctors}/${id}/availability`, {
+            params: { date }
+        });
+        
+        return data;
+    },
+
     async createDoctor(dto: CreateDoctorDto): Promise<Doctor> {
         const { data } = await api.post<Doctor>(API_ENDPOINTS.doctors, dto);
         return data;
