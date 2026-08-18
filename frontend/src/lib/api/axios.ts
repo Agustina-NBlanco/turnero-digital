@@ -1,4 +1,5 @@
 import { env } from "@/config/env";
+import { queryClient } from "@/config/queryClient";
 import axios from "axios";
 
 
@@ -17,10 +18,17 @@ api.interceptors.response.use(response => response, async error => {
     if (
         error.response?.status === 401 &&
         !originalRequest.url?.includes("/auth/login") &&
-        !originalRequest.url?.includes("/auth/refresh")
+        !originalRequest.url?.includes("/auth/refresh") &&
+        !originalRequest.url?.includes("/auth/session")
     ) {
 
         if (originalRequest._retry) {
+            queryClient.clear()
+
+            if (typeof window !== "undefined") {
+                window.location.replace("/login")
+            }
+
             return Promise.reject(error)
         }
 
@@ -32,6 +40,12 @@ api.interceptors.response.use(response => response, async error => {
 
             return api(originalRequest)
         } catch {
+            queryClient.clear()
+
+            if (typeof window !== "undefined") {
+                window.location.replace("/login")
+            }
+
             return Promise.reject(error)
         }
     }

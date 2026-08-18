@@ -16,6 +16,7 @@ import { useState } from "react";
 import TableToolbar from "@/components/shared/tables/TableToolbar";
 import { useAppointments } from "@/features/appointments/hooks/useAppointments";
 import { useDeleteAppointment } from "@/features/appointments/hooks/useDeleteAppointment";
+import Loader from "@/components/ui/feedback/Loader";
 
 
 
@@ -119,9 +120,7 @@ export default function AppointmentsPage() {
 
             {isLoading ? (
 
-                <div className="py-12 text-center text-slate-500">
-                    Cargando turnos...
-                </div>
+                <Loader title="Cargando turnos..." description="Obteniendo turnos del sistema..." />
 
             ) : appointments.length === 0 ? (
 

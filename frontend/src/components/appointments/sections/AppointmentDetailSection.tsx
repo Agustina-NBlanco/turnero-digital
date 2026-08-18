@@ -15,6 +15,7 @@ import { useDeleteAppointment } from "@/features/appointments/hooks/useDeleteApp
 import { appointmentStatus } from "@/types/enums/appointmentStatus";
 import { appointmentStatusVariant } from "@/constants/status/appointmentStatusVariant";
 import { appointmentStatusLabel } from "@/constants/status/appointmentStatusLabel";
+import Loader from "@/components/ui/feedback/Loader";
 
 
 interface AppointmentDetailSectionProps {
@@ -48,9 +49,7 @@ export default function AppointmentDetailSection({
                     subtitle="Cargando información del turno..."
                 />
 
-                <div className="py-12 text-center text-slate-500">
-                    Cargando turno...
-                </div>
+                <Loader title="Cargando turno..." description="Obteniendo información del turno..." />
             </div>
         )
     }
