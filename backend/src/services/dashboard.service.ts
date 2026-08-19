@@ -3,7 +3,7 @@ import { Appointment } from "../entities/Appointment";
 import { Doctor } from "../entities/Doctor";
 import { User } from "../entities/User";
 import { UserRole } from "../enums/UserRole";
-import { getAppointmentsByWeek, getAppointmentsByStatus, getTodayAppointments, getUpcomingAppointments } from "../utils/dashboard.utils";
+import { getAppointmentsByWeek, getAppointmentsByStatus, getTodayAppointments, getUpcomingAppointments, getTodayAppointmentsPreview } from "../utils/dashboard.utils";
 import { getDateRanges } from "../utils/date.utils";
 
 const userRepository = AppDataSource.getRepository(User)
@@ -31,6 +31,7 @@ export const dashboardStats = async (userId: string, role: UserRole) => {
         byStatus: getAppointmentsByStatus(appointments),
         byDay: getAppointmentsByWeek(appointments, startOfWeek, endOfWeek),
         today: getTodayAppointments(appointments, startOfDay, endOfDay),
+        todayPreview: getTodayAppointmentsPreview(appointments, startOfDay, endOfDay),
         upcoming: getUpcomingAppointments(appointments, startOfWeek, endOfWeek)
     }
 
