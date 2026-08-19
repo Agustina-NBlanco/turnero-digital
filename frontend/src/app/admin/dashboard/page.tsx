@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
                 <AppointmentsChart byDay={dashboard.byDay} />
 
-                <TodayAgenda appointments={dashboard.today} />
+                <TodayAgenda appointments={dashboard.todayPreview} />
             </div>
 
             <div className="mt-6">

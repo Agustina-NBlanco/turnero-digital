@@ -58,15 +58,25 @@ export const getAppointmentsByWeek = (appointments: Appointment[], startOfWeek: 
 }
 
 export const getTodayAppointments = (appointments: Appointment[], startOfDay: Date, endOfDay: Date) => {
-
     return appointments
         .filter(appt => {
 
             const date = parseDateOnly(appt.date)
 
-            return date >= startOfDay && date <= endOfDay
+            return (
+                date >= startOfDay &&
+                date <= endOfDay &&
+                (
+                    appt.status === AppointmentStatus.PENDING ||
+                    appt.status === AppointmentStatus.CONFIRMED
+                )
+            )
         })
         .sort((a, b) => a.time.localeCompare(b.time))
+}
+
+export const getTodayAppointmentsPreview = (appointments: Appointment[], startOfDay: Date, endOfDay: Date) => {
+    return getTodayAppointments(appointments, startOfDay, endOfDay).slice(0, 4)
 }
 
 export const getUpcomingAppointments = (appointments: Appointment[], startOfWeek: Date, endOfWeek: Date) => {

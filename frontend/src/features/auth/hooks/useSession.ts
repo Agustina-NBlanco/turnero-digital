@@ -9,6 +9,8 @@ export function useSession() {
             const session = await authService.getSession()
             return session.user
         },
-        retry: false
+        retry: false,
+        staleTime: 0,
+        refetchOnMount: false
     })
 }

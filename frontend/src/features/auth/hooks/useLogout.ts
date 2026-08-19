@@ -12,7 +12,7 @@ export function useLogout() {
         mutationFn: authService.logout,
 
         onSuccess: () => {
-            queryClient.clear()
+            queryClient.setQueryData(["session"], null)
 
             toast.success("Sesión cerrada correctamente")
 
@@ -22,7 +22,7 @@ export function useLogout() {
         onError: (error) => {
             console.log(error)
 
-            queryClient.clear()
+            queryClient.setQueryData(["session"], null)
 
             router.push("/login")
         }

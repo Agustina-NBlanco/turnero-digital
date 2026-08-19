@@ -6,6 +6,7 @@ import { Eye, EyeOff } from "lucide-react"
 import Modal from "@/components/ui/overlay/Modal"
 import Input from "@/components/ui/forms/Input"
 import { useChangePassword } from "@/features/auth/hooks/useChangePassword"
+import { ChangePasswordSchema } from "@/lib/validations/authSchema"
 
 interface Props {
     open: boolean
@@ -24,20 +25,31 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
         confirmPassword: ""
     })
 
+    const [touched, setTouched] = useState({
+        currentPassword: false,
+        newPassword: false,
+        confirmPassword: false
+    })
+
     const { mutate: changePassword, isPending: isChanging } = useChangePassword()
 
-    const handleChange = (field: string, value: string) => {
+    const validation = ChangePasswordSchema.safeParse(form)
+
+    const errors = validation.success ? {} : validation.error.flatten().fieldErrors
+
+    const isValid = validation.success
+
+    const handleChange = (field: keyof typeof form, value: string) => {
         setForm(prev => ({
             ...prev,
             [field]: value
         }))
-    }
 
-    const isValid =
-        Boolean(form.currentPassword) &&
-        Boolean(form.newPassword) &&
-        Boolean(form.confirmPassword) &&
-        form.newPassword === form.confirmPassword
+        setTouched(prev => ({
+            ...prev,
+            [field]: true
+        }))
+    }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -50,6 +62,12 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
                     currentPassword: "",
                     newPassword: "",
                     confirmPassword: ""
+                })
+
+                setTouched({
+                    currentPassword: false,
+                    newPassword: false,
+                    confirmPassword: false
                 })
 
                 setShowCurrent(false)
@@ -90,6 +108,12 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
                             {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
                     </div>
+
+                    {touched.currentPassword && errors.currentPassword?.[0] && (
+                        <p className="text-xs text-red-500">
+                            {errors.currentPassword[0]}
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -112,6 +136,13 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
                             {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
                     </div>
+
+                    {touched.newPassword && errors.newPassword?.[0] && (
+                        <p className="text-xs text-red-500">
+                            {errors.newPassword[0]}
+                        </p>
+                    )}
+
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -134,13 +165,15 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
                             {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
                     </div>
+
+                    {touched.confirmPassword && errors.confirmPassword?.[0] && (
+                        <p className="text-xs text-red-500">
+                            {errors.confirmPassword[0]}
+                        </p>
+                    )}
+
                 </div>
 
-                {form.newPassword !== form.confirmPassword && form.confirmPassword && (
-                    <p className="text-sm text-red-500">
-                        Las contraseñas no coinciden
-                    </p>
-                )}
 
                 <div className="flex justify-end gap-3 pt-2">
                     <Button

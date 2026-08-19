@@ -1,4 +1,5 @@
 import { env } from "@/config/env";
+import { queryClient } from "@/config/queryClient";
 import axios from "axios";
 
 
@@ -21,6 +22,12 @@ api.interceptors.response.use(response => response, async error => {
     ) {
 
         if (originalRequest._retry) {
+
+            if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+                queryClient.clear()
+                window.location.replace("/login")
+            }
+
             return Promise.reject(error)
         }
 
@@ -32,6 +39,12 @@ api.interceptors.response.use(response => response, async error => {
 
             return api(originalRequest)
         } catch {
+
+            if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+                queryClient.clear()
+                window.location.replace("/login")
+            }
+
             return Promise.reject(error)
         }
     }

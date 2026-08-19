@@ -6,6 +6,6 @@ export function useAppointments() {
     return useQuery({
         queryKey: ["appointments"],
         queryFn: appointmentService.getAllAppointments,
-        refetchOnMount: "always"
+        refetchInterval: 1000 * 60 * 5
     })
 }
