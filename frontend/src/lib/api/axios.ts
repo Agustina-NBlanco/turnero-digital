@@ -18,14 +18,13 @@ api.interceptors.response.use(response => response, async error => {
     if (
         error.response?.status === 401 &&
         !originalRequest.url?.includes("/auth/login") &&
-        !originalRequest.url?.includes("/auth/refresh") &&
-        !originalRequest.url?.includes("/auth/session")
+        !originalRequest.url?.includes("/auth/refresh")
     ) {
 
         if (originalRequest._retry) {
-            queryClient.clear()
 
-            if (typeof window !== "undefined") {
+            if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+                queryClient.clear()
                 window.location.replace("/login")
             }
 
@@ -40,9 +39,9 @@ api.interceptors.response.use(response => response, async error => {
 
             return api(originalRequest)
         } catch {
-            queryClient.clear()
 
-            if (typeof window !== "undefined") {
+            if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+                queryClient.clear()
                 window.location.replace("/login")
             }
 

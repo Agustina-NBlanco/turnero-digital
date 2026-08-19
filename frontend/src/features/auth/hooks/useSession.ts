@@ -11,6 +11,6 @@ export function useSession() {
         },
         retry: false,
         staleTime: 0,
-        refetchOnMount: true
+        refetchOnMount: false
     })
 }

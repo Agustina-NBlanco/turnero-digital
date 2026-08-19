@@ -21,5 +21,7 @@ export interface DashboardStats {
 
     today: Appointment[];
 
+    todayPreview: Appointment[];
+
     upcoming: Appointment[];
 }
