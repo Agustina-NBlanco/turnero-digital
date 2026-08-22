@@ -16,7 +16,9 @@ export function usePublicRoute() {
         if (!session) return
 
         router.replace(
-            session.role === userRole.Admin ? "/admin/dashboard" : "/patient/dashboard"
+            session.role === userRole.Admin
+                ? "/admin/dashboard"
+                : "/patient/dashboard"
         )
     }, [session, isLoading, router])
 
