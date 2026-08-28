@@ -11,7 +11,8 @@ export function usePublicRoute() {
     const { data: session, isLoading } = useSession()
 
     useEffect(() => {
-        if (isLoading) return;
+
+        if (isLoading) return
 
         if (!session) return
 
@@ -24,6 +25,6 @@ export function usePublicRoute() {
 
     return {
         isLoading,
-        canRender: !isLoading && !session,
+        canRender: !isLoading && !session
     }
 }
