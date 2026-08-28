@@ -8,8 +8,8 @@ export async function refreshAccessToken(): Promise<void> {
         refreshPromise = api
             .post("/auth/refresh")
             .then(() => undefined)
-            .finally(() => (refreshPromise = null))
+            .finally(() => (refreshPromise = null));
     }
 
-    return refreshPromise
+    return refreshPromise;
 }

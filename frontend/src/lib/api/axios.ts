@@ -27,12 +27,17 @@ api.interceptors.response.use(response => response, async error => {
     }
 
     originalRequest._retry = true
+
     try {
         await refreshAccessToken()
+
         return api(originalRequest)
+
     } catch {
         queryClient.clear()
-        if (typeof window !== "undefined" &&
+
+        if (
+            typeof window !== "undefined" &&
             window.location.pathname !== "/login"
         ) {
             window.location.replace("/login")
@@ -40,6 +45,7 @@ api.interceptors.response.use(response => response, async error => {
 
         return Promise.reject(error)
     }
-})
+}
+)
 
 export default api

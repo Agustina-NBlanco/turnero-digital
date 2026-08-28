@@ -9,7 +9,9 @@ export function useLogin() {
         mutationFn: authService.login,
 
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ["session"] })
+            await queryClient.invalidateQueries({
+                queryKey: ["session"]
+            })
         },
 
         onError: error => {
