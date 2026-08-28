@@ -17,7 +17,7 @@ export default function PatientDrawer({ open, onClose }: PatientDrawerProps) {
             )}
 
             <aside className={`fixed left-0 top-0 z-50 h-dvh w-64 bg-white transition-transform duration-300 lg:hidden ${open ? "translate-x-0" : "-translate-x-full"}`}>
-                <PatientSidebar onNavigate={onClose} />
+                <PatientSidebar onNavigate={onClose}/>
             </aside>
 
         </>
